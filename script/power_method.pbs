@@ -1,0 +1,50 @@
+#PBS -N power_method
+#PBS -l nodes=8:ppn=9
+#PBS -M ebrahim@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/em24/
+#PBS -e /scratch/em24/
+
+
+
+echo "salina"
+for p in 64
+do
+	echo "p = $p"
+	mpiexec -n $p ~/ompqr/power_method_base /scratch/em24/dict/salina_204x54129.txt 204 54129 100 1 1000 0 1
+
+	for l in 400 800 1200
+	do
+		mpiexec -n $p ~/ompqr/power_method /scratch/em24/ompo_salina/salina_204x54129x"$l"_D /scratch/em24/ompo_salina/salina_204x54129x"$l"_64 204 54129 "$l"  100 64 1 2000 0 1
+	done
+done
+
+
+
+echo "video"
+for p in 64
+do
+	echo "p = $p"
+	mpiexec -n $p ~/ompqr/power_method_base /scratch/em24/dict/video_1764x100000.txt 1764 100000  100 1 2000 0 1
+
+	for l in 1000 1500 2000
+	do
+		mpiexec -n $p ~/ompqr/power_method /scratch/em24/ompo_video/video_1764x100000x"$l"_D /scratch/em24/ompo_video/video_1764x100000x"$l"_64 1764 100000 "$l"  100 64 1 2000 0 1
+	done
+done
+
+
+
+echo "LF"
+mpiexec -n 64 ~/ompqr/power_method_base /scratch/em24/dict/LF_18496x272320_4255/LF 18496 272320 100 64 2000 0 1
+
+for p in 64
+do
+	echo "p = $p"
+	for l in 1000 2000 3000
+	do
+		mpiexec -n $p ~/ompqr/power_method /scratch/em24/ompo_LF/LF_18496x272320x"$l"_D /scratch/em24/ompo_LF/LF_18496x272320x"$l"_64 18496 272320 "$l" 100 64 1 2000 0 1
+	done
+done

@@ -1,0 +1,95 @@
+#PBS -N omp_video
+#PBS -l nodes=8:ppn=9
+#PBS -M ebrahim@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/em24/
+#PBS -e /scratch/em24/
+
+#echo "video"
+#
+#
+#echo "n = 100000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 100000 1000 500 4500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 50000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 50000 1000 500 4500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 10000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 10000 1000 500 4500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 5000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 5000 1000 500 4500 1 0.1 1 0 1 0 100000
+
+
+#echo "video2"
+#
+#
+#echo "n = 100000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 100000 200 200 1000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 50000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 50000 200 200 1000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 10000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 10000 200 200 1000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 5000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 5000 200 200 1000 1 0.1 1 0 1 0 100000
+
+#echo "n = 5000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 1000 200 200 1000 1 0.1 1 0 1 0 100000
+
+
+#echo "n = 2000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 2000 200 400 2000 1 0.1 1 0 1 0 100000
+
+
+#echo "n = 3000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 3000 500 400 3000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 4000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 4000 500 500 4000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 5000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 5000 500 600 5000 1 0.1 1 0 1 0 100000
+
+
+
+#echo "n = 10000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 10000 500 600 5000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 20000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 20000 500 600 5000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 50000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 50000 500 600 5000 1 0.1 1 0 1 0 100000
+#
+#echo "n = 100000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 100000 500 600 5000 1 0.1 1 0 1 0 100000
+
+
+#echo "n = 10000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 10000 50 100 500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 20000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 20000 50 100 500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 50000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 50000 50 100 500 1 0.1 1 0 1 0 100000
+#
+#echo "n = 100000"
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v_dict/video_1764x100000.txt 1764 100000 50 100 500 1 0.1 1 0 1 0 100000
+
+
+
+echo "n = 1000"
+mpiexec -n 64 /home/em24/ompqr/ompqr  /scratch/em24/dict/video_1764x100000.txt  /scratch/em24/v  1764 1000 50  100  501 1 0.1 1 0 1 0 100000
+#mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v 1764 1000 500 600 1000 1 0.1 1 0 1 0 100000
+
+
+echo "n = 5000"
+mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v 1764 5000 50  100  500 1 0.1 1 0 1 0 100000
+mpiexec -n 64 /home/em24/ompqr/ompqr /scratch/em24/dict/video_1764x100000.txt /scratch/em24/v 1764 5000 500 600 5000 1 0.1 1 0 1 0 100000
+

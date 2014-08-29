@@ -1,0 +1,33 @@
+#PBS -N omp_LF_test
+#PBS -l nodes=8:ppn=9
+#PBS -M ebrahim@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/em24/
+#PBS -e /scratch/em24/
+
+
+
+#echo "n=27232"
+#mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/LF_18496x272320_4255/temp 18496 27232 200 200 1000  1 0.1 1 0 1 0 272320
+#
+#echo "n=54464"
+#mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/LF_18496x272320_4255/temp 18496 54464 200 200 1000  1 0.1 1 0 1 0 272320
+#
+#echo "n=136160"
+#mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/LF_18496x272320_4255/temp 18496 136160 200 200 1000 1 0.1 1 0 1 0 272320
+#
+#echo "n=272320"
+#mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/LF_18496x272320_4255/temp 18496 272320 2000 1 2001 1 0.1 1 0 1 0 272320
+
+
+echo "n=2723"
+mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/l 18496 2723 200  200  1000  1 0.1 1 0 1 0 272320
+mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/l 18496 2723 1000 1000 2723 1 0.1 1 0 1 0 272320
+
+
+
+echo "n=5446"
+mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/l 18496 5446 200  200  1000  1 0.1 1 0 1 0 272320
+mpiexec -n 64 ~/ompqr/ompqr_multiplefile /scratch/em24/dict/LF_18496x272320_4255/LF /scratch/em24/dict/l 18496 5446 1000 1000 5446 1 0.1 1 0 1 0 272320

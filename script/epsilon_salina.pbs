@@ -1,0 +1,24 @@
+#PBS -N epsilon_salina
+#PBS -l nodes=8:ppn=9
+#PBS -M ebrahim@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/em24/
+#PBS -e /scratch/em24/
+
+
+#echo "salina 0.001"
+#mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 40  20  100  1 0.001 1 0 1 0 54129
+#mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 100 100 1001 1 0.001 1 0 1 0 54129
+
+#echo "salina 0.01"
+#mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 40  20  100  1 0.01 1 0 1 0 54129
+#mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 100 100 1001 1 0.01 1 0 1 0 54129
+
+echo "salina 0.05"
+mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 40  20  100  1 0.05 1 0 1 0 54129
+mpiexec -n 64 ~/ompqr/ompqr /scratch/em24/dict/salina_204x54129.txt /scratch/em24/s 204 54129 100 100 1001 1 0.05 1 0 1 0 54129
+
+
+
