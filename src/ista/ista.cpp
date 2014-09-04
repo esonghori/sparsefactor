@@ -66,11 +66,11 @@ int main(int argc, char*argv[])
 	srand(0);
 	
 	
-	if(argc!=13)
+	if(argc!=15)
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./ista inDfile inVfile m n l numoffiles localD gammaN lambda steps verbose ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./ista inDfile inVfile inXfile inYfile m n l numoffiles localD gammaN lambda steps verbose ncpu" << endl;
 			cout << "numoffiles % npes = 0" << endl;
 			cout << "gamma == gammaN / n" << endl;
 		}
@@ -78,16 +78,20 @@ int main(int argc, char*argv[])
 		return -1;
 	}
 	
-	int m = atoi(argv[3]);
-	int n = atoi(argv[4]);
-	int l = atoi(argv[5]);
-	int numoffiles = atoi(argv[6]);
-	int localD = atoi(argv[7]);
-	double gammaN = atof(argv[8]);
-	double lambda = atof(argv[0]);
-	int steps = atoi(argv[10]);
-	int verbose = atoi(argv[11]);
-	int ncpu = atoi(argv[12]);
+	const char *inDfile = argv[1];
+	const char *inVfile = argv[2];
+	const char *inXfile = argv[3];
+	const char *inYfile = argv[4];
+	int m = atoi(argv[5]);
+	int n = atoi(argv[6]);
+	int l = atoi(argv[7]);
+	int numoffiles = atoi(argv[8]);
+	int localD = atoi(argv[9]);
+	double gammaN = atof(argv[10]);
+	double lambda = atof(argv[11]);
+	int steps = atoi(argv[12]);
+	int verbose = atoi(argv[13]);
+	int ncpu = atoi(argv[14]);
 	
 	
 	assert(numoffiles%npes == 0);
@@ -113,7 +117,7 @@ int main(int argc, char*argv[])
 	{
 		D = MatrixXd::Zero(m, l);
 		ifstream fD;
-		fD.open(argv[1]);
+		fD.open(inDfile);
 		if(!fD.is_open())
 		{
 			cout << myrank <<" File not found: " << argv[1] << endl;		
@@ -145,7 +149,7 @@ int main(int argc, char*argv[])
 		int fileID = myrank*(numoffiles/npes) + i;
 	
 		stringstream  sfV;
-		sfV << argv[2] << "_" << fileID;	
+		sfV << inVfile << "_" << fileID;	
 		ifstream fV;
 		fV.open(sfV.str().c_str());
 		if(!fV.is_open())
@@ -190,27 +194,84 @@ int main(int argc, char*argv[])
 	MatrixXd q(l, 1);
 	MatrixXd y(m, 1);
 	MatrixXd yres(m, 1);
-	MatrixXd x = MatrixXd::Random(myn,1); x = x/x.norm();
-	x = x/x.norm();
-	MatrixXd deltax;
-	MatrixXd xold = x;
+	MatrixXd x(myn,1); //= MatrixXd::Random(myn,1); x = x/x.norm();
+	MatrixXd deltax(myn,1);
+	MatrixXd xold(myn,1);
 	
-	int y_ind = rand()%myn;
+	
+	/*int y_ind = rand()%myn;
 	if(!localD || !myrank)
 	{
 		MatrixXd nois = MatrixXd::Random(y.rows(),y.cols());
 		nois = 0.1*(nois/nois.norm());
 		y = D*V.col(y_ind) + nois;
 	}
+	if(!localD)
+	{
+		MPI_Bcast(y.data(), m, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	}*/
 	
 	
+	ifstream fX;
+	fX.open(inXfile);
+	if(!fX.is_open())
+	{
+		cout << myrank << " File not found: " << inXfile << endl;		
+		MPI_Finalize();
+		return -1;
+	}
+	if(!myrank && verbose)
+		cout<< "Start reading X from " << inXfile <<endl;
+	
+	for(int i=0;i<n;i++)
+	{
+		double value;
+		fX >> value;
+		if(i >= myrank*myn && i < (myrank+1)*myn)
+		{
+			x(i - myrank*myn, 0) = value;
+		}
+	}
+	fX.close();
+	
+	
+	if(!myrank && verbose)
+		cout<< "x(myrank=1) = " << endl << x.transpose() <<endl;
+	
+	
+	xold = x;
+	
+	if(!localD || !myrank)
+	{
+		ifstream fY;
+		fY.open(inYfile);
+		if(!fY.is_open())
+		{
+			cout << myrank << " File not found: " << inYfile << endl;		
+			MPI_Finalize();
+			return -1;
+		}
+		if(!myrank && verbose)
+			cout<< "Start reading Y from " << inYfile <<endl;
+		
+		for(int i=0;i<m;i++)
+		{
+			double value;
+			fY >> value;
+			y(i, 0) = value;
+		}
+		fY.close();
+	}
 	if(!localD)
 	{
 		MPI_Bcast(y.data(), m, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	}
 	
+	if(!myrank && verbose)
+		cout<< "y(myrank=1) = " << endl << y.transpose() <<endl;
 	
-	double diffnorm2_local, diffnorm2;
+	
+	double diffX2_local, diffX2;
 	double xnorm2_local, xnorm2;
 
 	double tpi = 0;
@@ -218,16 +279,21 @@ int main(int argc, char*argv[])
 	double gamma = (2.0 * gammaN)/n;
 	
 	double ynorm = y.norm();	
+	double diffY2 = 0;
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	
+	if(!myrank && verbose)
+	{
+		cout << "start ista with gamma = " << gamma << " lambda = " << lambda << endl; 
+		cout << "iter time diffY2 diffX2" << endl;
+	}
 	
 	
+	gettimeofday(&t1, NULL);
 	int step;
 	for(step = 0;step <steps ; step++)
 	{
-		gettimeofday(&t1, NULL);
-		
 		if(localD)
 		{
 			p_local = V*x;
@@ -238,9 +304,11 @@ int main(int argc, char*argv[])
 				
 				if(verbose)
 				{
-					cout << "yres.norm() / ynorm = " << yres.norm() / ynorm << endl;
+					cout <<"yres" << endl << yres.transpose() << endl;
 				}
 				
+				diffY2 = yres.norm();
+				diffY2 *= diffY2;
 				
 				q = D.transpose()*yres;
 			}
@@ -253,29 +321,26 @@ int main(int argc, char*argv[])
 			yres = D*p - y;
 			
 			if(!myrank && verbose)
-				cout << "yres.norm() / ynorm = " << yres.norm() / ynorm << endl;
-				
+			{
+				cout <<"yres" << endl << yres.transpose() << endl;
+			}
+			
+			diffY2 = yres.norm();
+			diffY2 *= diffY2;
+			
 			q = D.transpose()*yres;
 		}	
-		
 		
 		deltax = V.transpose()*q;
 		
 		
 		x = wthresh(x - gamma*deltax, gamma*lambda);
 		
-		
-		diffnorm2_local = (xold - x).norm();
-		MPI_Allreduce(&diffnorm2_local, &diffnorm2, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+		diffX2_local = (xold - x).norm();
+		diffX2_local *= diffX2_local;
+		MPI_Allreduce(&diffX2_local, &diffX2, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-			
-		if(!myrank && verbose)
-		{
-			cout<< "x.nonZeros() = " << x.nonZeros() << endl;
-			cout<< "diffnorm2 = " << diffnorm2 << endl;
-		}	
-			
-		if(diffnorm2 < 1E-5)
+		if(diffX2 < 1E-5)
 		{
 			if(!myrank)
 			{
@@ -283,7 +348,7 @@ int main(int argc, char*argv[])
 			}
 			break;
 		}
-		else if(diffnorm2 > 1E10)
+		else if(diffX2 > 1E10)
 		{
 			if(!myrank)
 			{
@@ -292,14 +357,18 @@ int main(int argc, char*argv[])
 			break;
 		}
 		
+		xold = x;
+		
 		gettimeofday(&t2, NULL);
+		if(!myrank)
+		{
+			cout << step << " " <<  getTimeMs(t1,t2) << " " << diffY2 << " " << diffX2 << endl;
+		}
 		tpi += getTimeMs(t1,t2);
 	}
 	
 	if(!myrank)
 	{
-		cout<< "x.nonZeros() = " << x.nonZeros() << endl;
-		cout << "yres.norm() / ynorm = " << yres.norm() / ynorm << endl;
 		cout << "time(ms) per iter = " << tpi/(step+1) << endl;
 	}
 	

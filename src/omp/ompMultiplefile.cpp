@@ -397,8 +397,10 @@ int main(int argc, char*argv[])
 	if(argc!=15)
 	{
 		if(!myrank)
+		{	
 			cout << "usage: mpiexec -n npes ./ompMultiplefile infile_prefix outfile m n lmin lstep lmax kperl epsilon ncpu of QRbatch verbos N" << endl;
-			cout << "npes == number_of_files,   N == total cols == npes*num_of_cols_in_a_file" << endl;
+			cout << "npes == number_of_files, N == total cols == npes*num_of_cols_in_a_file" << endl;
+		}
 			
 		MPI_Finalize();	
 		return -1;

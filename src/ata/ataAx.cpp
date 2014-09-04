@@ -45,7 +45,7 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./ata m n steps ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./ataAx m n steps ncpu" << endl;
 		}
 		MPI_Finalize();	
 		return -1;

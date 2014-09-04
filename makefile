@@ -1,10 +1,7 @@
-.PHONY: bin cleanmake file 
+.PHONY: checkEigen 
 
-#EIGEN=/home/em24/eigen/
+
 MPICPP=mpic++ -O3 -g  -std=c++11 -fopenmp
-
-
-
 
 
 all: checkEigen bin bin/omp bin/ompMultiplefile bin/ompRand bin/ompOutFile bin/ompSubset bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/ista
