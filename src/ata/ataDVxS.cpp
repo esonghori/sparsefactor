@@ -206,6 +206,10 @@ int main(int argc, char*argv[])
 		
 		
 		gettimeofday(&t2, NULL);
+		if(!myrank && verbose)
+		{
+			cout << step << " " <<  getTimeMs(t1,t2) << " " << xnorm2 << endl;
+		}
 		tpi += getTimeMs(t1,t2);
 	}
 	

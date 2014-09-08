@@ -41,11 +41,11 @@ int main(int argc, char*argv[])
 	srand(0);
 	
 	
-	if(argc!=5)
+	if(argc!=6)
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./ataAx m n steps ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./ataAx m n steps verbose ncpu" << endl;
 			cout << "using random A"  << endl;
 			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
 		}
@@ -56,7 +56,8 @@ int main(int argc, char*argv[])
 	int m = atoi(argv[1]);
 	int n = atoi(argv[2]);
 	int steps = atoi(argv[3]);
-	int ncpu = atoi(argv[4]);
+	int verbose = atoi(argv[4]);
+	int ncpu = atoi(argv[5]);
 	
 	int myn = (n + npes - 1)/npes;
 	
@@ -96,6 +97,10 @@ int main(int argc, char*argv[])
 		
 		
 		gettimeofday(&t2, NULL);
+		if(!myrank && verbose)
+		{
+			cout << step << " " <<  getTimeMs(t1,t2) << " " << xnorm2 << endl;
+		}
 		tpi += getTimeMs(t1,t2);
 	}
 	
