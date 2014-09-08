@@ -46,13 +46,16 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./powerMethodDVxS inDfile inVfile m n l e_num numoffiles localD steps verbose ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./powerMethodDVxS inDfile inVfile_prefix m n l e_num numoffiles localD steps verbose ncpu" << endl;
 			cout << "numoffiles % npes = 0" << endl;
+			cout << "infile_prefix: infile_prefix_0 .. infile_prefix_{numoffiles-1}" << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
 		}
 		MPI_Finalize();	
 		return -1;
 	}
-	
+	const char * inDfile =argv[1];
+	const char * inVfile_prefix =argv[2];
 	int m = atoi(argv[3]);
 	int n = atoi(argv[4]);
 	int l = atoi(argv[5]);
@@ -87,10 +90,10 @@ int main(int argc, char*argv[])
 	{
 		D = MatrixXd::Zero(m, l);
 		ifstream fD;
-		fD.open(argv[1]);
+		fD.open(inDfile);
 		if(!fD.is_open())
 		{
-			cout << myrank <<" File not found: " << argv[1] << endl;		
+			cout << myrank <<" File not found: " << inDfile << endl;		
 			MPI_Finalize();
 			return -1;
 		}
@@ -102,7 +105,7 @@ int main(int argc, char*argv[])
 			{
 				cout<< "local D" <<endl;
 			}
-			cout<< "Start reading D from " << argv[1] <<endl;
+			cout<< "Start reading D from " << inDfile <<endl;
 		}
 		for(int i=0; i< m; i++)
 		{
@@ -119,7 +122,7 @@ int main(int argc, char*argv[])
 		int fileID = myrank*(numoffiles/npes) + i;
 	
 		stringstream  sfV;
-		sfV << argv[2] << "_" << fileID;	
+		sfV << inVfile_prefix << "_" << fileID;	
 		ifstream fV;
 		fV.open(sfV.str().c_str());
 		if(!fV.is_open())

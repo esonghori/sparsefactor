@@ -1,14 +1,14 @@
-.PHONY: checkEigen 
+.PHONY: checkEigen bin
 
 
 MPICPP=mpic++ -O3 -g  -std=c++11 -fopenmp
 
 
-all: checkEigen bin bin/omp bin/ompMultiplefile bin/ompRand bin/ompOutFile bin/ompSubset bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS
+all: checkEigen bin bin/omp bin/ompMultiplefile bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS
 
 checkEigen:
 ifeq ($(EIGEN),)
-	$(error EIGEN is not set correctly.)
+	$(error EIGEN is not set.)
 endif
 
 bin:
@@ -20,16 +20,6 @@ bin/omp: src/omp/omp.cpp
 bin/ompMultiplefile: src/omp/ompMultiplefile.cpp
 	${MPICPP} -o bin/ompMultiplefile src/omp/ompMultiplefile.cpp -I${EIGEN}
 	
-bin/ompRand: src/omp/ompRand.cpp
-	${MPICPP} -o bin/ompRand src/omp/ompRand.cpp -I${EIGEN}
-
-bin/ompOutFile: src/omp/ompOutFile.cpp
-	${MPICPP} -o bin/ompOutFile src/omp/ompOutFile.cpp -I${EIGEN}
-
-bin/ompSubset: src/omp/ompSubset.cpp
-	${MPICPP} -o bin/ompSubset src/omp/ompSubset.cpp -I${EIGEN}
-	
-
 
 bin/powerMethodDVxS: src/powerMethod/powerMethodDVxS.cpp
 	${MPICPP} -o bin/powerMethodDVxS src/powerMethod/powerMethodDVxS.cpp -I${EIGEN}

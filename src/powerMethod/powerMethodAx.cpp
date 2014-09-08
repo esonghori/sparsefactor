@@ -47,13 +47,16 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./powerMethodAx indicfile m n e_num numoffiles steps verbose ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./powerMethodAx infile_prefix m n e_num numoffiles steps verbose ncpu" << endl;
 			cout << "numoffiles == npes or numoffiles == 1" << endl;
+			cout << "if numoffiles > 1 infile_prefix: infile_prefix_0 .. infile_prefix_{numoffiles-1}" << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
 		}
 		MPI_Finalize();	
 		return -1;
 	}
 	
+	const char* infile_prefix = argv[1];
 	int m = atoi(argv[2]);
 	int n = atoi(argv[3]);
 	int e_num = atoi(argv[4]);
@@ -79,18 +82,18 @@ int main(int argc, char*argv[])
 	if(numoffiles == 1)
 	{
 		ifstream fr;
-		fr.open(argv[1]);
+		fr.open(infile_prefix);
 		if(!fr.is_open())
 		{
 			if(!myrank)
-				cout << "File not found: " << argv[1] << endl;
+				cout << "File not found: " << infile_prefix << endl;
 				
 			MPI_Finalize();
 			return -1;
 		}
 		
 		if(!myrank && verbose)
-			cout<< "Start reading A from " << argv[1] <<endl;
+			cout<< "Start reading A from " << infile_prefix <<endl;
 		
 		for(int i=0; i< m; i++)
 		{

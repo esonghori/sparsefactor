@@ -70,16 +70,20 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./istaDVxS inDfile inVfile inXfile inYfile m n l numoffiles localD gammaN lambda steps verbose ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./istaDVxS inDfile inVfile_perfix inXfile inYfile m n l numoffiles localD gammaN lambda steps verbose ncpu" << endl;
 			cout << "numoffiles % npes = 0" << endl;
+			cout << "if numoffiles > 1 inVfile_perfix: inVfile_0 .. inVfile_{numoffiles-1}" << endl;
 			cout << "gamma == gammaN / n" << endl;
+			cout << "localD == 1 calculate Dt(Dp) in rank==0 only" << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
+			
 		}
 		MPI_Finalize();	
 		return -1;
 	}
 	
 	const char *inDfile = argv[1];
-	const char *inVfile = argv[2];
+	const char *inVfile_perfix = argv[2];
 	const char *inXfile = argv[3];
 	const char *inYfile = argv[4];
 	int m = atoi(argv[5]);
@@ -120,7 +124,7 @@ int main(int argc, char*argv[])
 		fD.open(inDfile);
 		if(!fD.is_open())
 		{
-			cout << myrank <<" File not found: " << argv[1] << endl;		
+			cout << myrank <<" File not found: " << inDfile << endl;		
 			MPI_Finalize();
 			return -1;
 		}
@@ -132,7 +136,7 @@ int main(int argc, char*argv[])
 			{
 				cout<< "local D" <<endl;
 			}
-			cout<< "Start reading D from " << argv[1] <<endl;
+			cout<< "Start reading D from " << inDfile <<endl;
 		}
 		for(int i=0; i< m; i++)
 		{
@@ -149,7 +153,7 @@ int main(int argc, char*argv[])
 		int fileID = myrank*(numoffiles/npes) + i;
 	
 		stringstream  sfV;
-		sfV << inVfile << "_" << fileID;	
+		sfV << inVfile_perfix << "_" << fileID;	
 		ifstream fV;
 		fV.open(sfV.str().c_str());
 		if(!fV.is_open())

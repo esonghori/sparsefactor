@@ -398,8 +398,15 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{	
-			cout << "usage: mpiexec -n npes ./ompMultiplefile infile_prefix outfile m n lmin lstep lmax kperl epsilon ncpu of QRbatch verbos N" << endl;
+			cout << "usage: mpiexec -n npes ./ompMultiplefile infile_prefix outfile m n lmin lstep lmax kperl epsilon ncpu of QR_batch verbos N" << endl;
 			cout << "npes == number_of_files, N == total cols == npes*num_of_cols_in_a_file" << endl;
+			cout << "infile_prefix: infile_prefix_0 .. infile_prefix_{npes-1}" << endl;
+			cout << "QR_batch: QR 0, batch 1" << endl;
+			cout << "N>n for subset omp, N==n for normal omp" << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
+			cout << "kperl= k / l" << endl;
+			cout << "lmin <= l < lmax" << endl;
+			cout << "of==1 for writing outputs" << endl;
 		}
 			
 		MPI_Finalize();	

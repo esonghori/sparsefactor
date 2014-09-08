@@ -70,14 +70,17 @@ int main(int argc, char*argv[])
 	{
 		if(!myrank)
 		{
-			cout << "usage: mpiexec -n npes ./IstaAx inAfile inXfile inYfile m n numoffiles gammaN lambda steps verbose ncpu" << endl;
+			cout << "usage: mpiexec -n npes ./IstaAx inAfile_perfix inXfile inYfile m n numoffiles gammaN lambda steps verbose ncpu" << endl;
 			cout << "numoffiles == npes or numoffiles == 1" << endl;
+			cout << "if numoffiles > 1 inAfile_perfix: inAfile_0 .. inAfile_{numoffiles-1}" << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
+			
 		}
 		MPI_Finalize();	
 		return -1;
 	}
 	
-	const char* inAfile = argv[1];
+	const char* inAfile_perfix = argv[1];
 	const char* inXfile = argv[2];
 	const char* inYfile = argv[3];
 	int m = atoi(argv[4]);
@@ -106,18 +109,18 @@ int main(int argc, char*argv[])
 	if(numoffiles == 1)
 	{
 		ifstream fr;
-		fr.open(inAfile);
+		fr.open(inAfile_perfix);
 		if(!fr.is_open())
 		{
 			if(!myrank)
-				cout << "File not found: " << inAfile << endl;
+				cout << "File not found: " << inAfile_perfix << endl;
 				
 			MPI_Finalize();
 			return -1;
 		}
 		
 		if(!myrank && verbose)
-			cout<< "Start reading A from " << inAfile <<endl;
+			cout<< "Start reading A from " << inAfile_perfix <<endl;
 		
 		for(int i=0; i< m; i++)
 		{
@@ -143,7 +146,7 @@ int main(int argc, char*argv[])
 	else
 	{
 		stringstream  sofA;
-		sofA << inAfile << "_" << myrank;
+		sofA << inAfile_perfix << "_" << myrank;
 		
 		
 		ifstream fr;

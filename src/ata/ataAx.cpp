@@ -46,6 +46,8 @@ int main(int argc, char*argv[])
 		if(!myrank)
 		{
 			cout << "usage: mpiexec -n npes ./ataAx m n steps ncpu" << endl;
+			cout << "using random A"  << endl;
+			cout << "ncpu for openmp cores, ncpu==1 when using mpi" << endl;
 		}
 		MPI_Finalize();	
 		return -1;

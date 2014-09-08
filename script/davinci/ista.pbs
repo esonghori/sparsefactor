@@ -1,4 +1,4 @@
-#PBS -N spark
+#PBS -N ista_mpi
 #PBS -l nodes=8:ppn=9
 #PBS -l walltime=00:30:00
 #PBS -M ebrahim@rice.edu
@@ -8,9 +8,7 @@
 #PBS -o /scratch/em24/
 #PBS -e /scratch/em24/
 
-#usage: $SPARK/sbin/davinci.sh --class "CLASS" JARFILE [INPUTS]
 
-#TODO
 echo "DVxS"
 mpiexec -n 2 ../../bin/istaDVxS ../../data/d ../../data/v_4x6x3_2/v_4x6x3_2 ../../data/x ../../data/y 4 6 3 2 1 0.1 0.01 20 0 1
 
