@@ -4,7 +4,7 @@
 MPICPP=mpic++ -O3 -g  -std=c++11 -fopenmp
 
 
-all: checkEigen bin bin/omp bin/ompMultiplefile bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS
+all: checkEigen bin bin/omp bin/ompMultiplefile bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS bin/mksample
 
 checkEigen:
 ifeq ($(EIGEN),)
@@ -41,6 +41,9 @@ bin/istaDVxS: src/ista/istaDVxS.cpp
 	
 bin/istaAx: src/ista/istaAx.cpp
 	${MPICPP} -o bin/istaAx src/ista/istaAx.cpp -I${EIGEN}
+
+bin/mksample: src/ista/mksample.cpp
+	${MPICPP} -o bin/mksample src/ista/mksample.cpp -I${EIGEN}
 
 
 clean:

@@ -1,12 +1,12 @@
 #PBS -N ista_mpi
 #PBS -l nodes=8:ppn=9
 #PBS -l walltime=00:30:00
-#PBS -M ebrahim@rice.edu
+#PBS -M am34@rice.edu
 #PBS -q parallel
 #PBS -m bae
 #PBS -V
-#PBS -o /scratch/em24/
-#PBS -e /scratch/em24/
+#PBS -o /scratch/am34/
+#PBS -e /scratch/am34/
 
 
 echo "omp"

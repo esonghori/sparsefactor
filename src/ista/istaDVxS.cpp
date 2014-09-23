@@ -197,8 +197,10 @@ int main(int argc, char*argv[])
 	MatrixXd p(l, 1);
 	MatrixXd q(l, 1);
 	MatrixXd y(m, 1);
+	MatrixXd ytilde(m, 1);
 	MatrixXd yres(m, 1);
 	MatrixXd x(myn,1); //= MatrixXd::Random(myn,1); x = x/x.norm();
+	MatrixXd aty(myn,1);
 	MatrixXd deltax(myn,1);
 	MatrixXd xold(myn,1);
 	
@@ -243,6 +245,7 @@ int main(int argc, char*argv[])
 		cout<< "x(myrank=1) = " << endl << x.transpose() <<endl;
 	
 	
+	aty = x;
 	xold = x;
 	
 	if(!localD || !myrank)
@@ -304,17 +307,19 @@ int main(int argc, char*argv[])
 			MPI_Reduce(p_local.data(), p.data(), l, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 			if(!myrank)
 			{
-				yres = D*p - y;
+				//yres = D*p - y;
+				ytilde = D*p;
+				yres = ytilde - y;
 				
 				if(verbose)
 				{
 					cout <<"yres" << endl << yres.transpose() << endl;
-				}
+				}				
 				
 				diffY2 = yres.norm();
 				diffY2 *= diffY2;
 				
-				q = D.transpose()*yres;
+				q = D.transpose()*ytilde;
 			}
 			MPI_Bcast(q.data(), l, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		}
@@ -322,7 +327,9 @@ int main(int argc, char*argv[])
 		{
 			p_local = V*x;
 			MPI_Allreduce(p_local.data(), p.data(), l, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-			yres = D*p - y;
+			//ytilde = D*p - y;
+			ytilde = D*p;
+			yres = ytilde - y;
 			
 			if(!myrank && verbose)
 			{
@@ -332,10 +339,10 @@ int main(int argc, char*argv[])
 			diffY2 = yres.norm();
 			diffY2 *= diffY2;
 			
-			q = D.transpose()*yres;
+			q = D.transpose()*ytilde;
 		}	
 		
-		deltax = V.transpose()*q;
+		deltax = V.transpose()*q - aty;
 		
 		
 		x = wthresh(x - gamma*deltax, gamma*lambda);
