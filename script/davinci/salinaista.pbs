@@ -1,0 +1,42 @@
+#PBS -N ista_mpi_salina
+#PBS -l nodes=12:ppn=12
+#PBS -l walltime=00:10:00
+#PBS -M am34@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/am34/results/mpi/ista/salina/
+#PBS -e /scratch/am34/results/mpi/ista/salina/
+
+
+m=204
+n=54129
+
+
+ld=1
+gamma=0.03 
+lambda=0.1
+steps=20
+verbos=0
+ncpu=1
+echo "DVxS"
+echo "l=200"
+l=200
+nfi=64
+mpiexec -n $nfi ~/GitHub/sparsefactor/bin/istaDVxS /scratch/em24/ompo_salina/salina_204x54129x200_D /scratch/am34/data/salina/v/salina_204x54129x200_64 /scratch/am34/data/salina/xx/x /scratch/am34/data/salina/y $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+
+nfi=64
+echo "DVxS"
+echo "L=400"
+l=400
+mpiexec -n $nfi ~/GitHub/sparsefactor/bin/istaDVxS /scratch/em24/ompo_salina/salina_204x54129x400_D /scratch/am34/data/salina/v400/salina_204x54129x400_64 /scratch/am34/data/salina/xx/x /scratch/am34/data/salina/y $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+
+echo "Ax"
+nfi=1
+
+mpiexec -n 64 ~/GitHub/sparsefactor/bin/istaAx /scratch/em24/dict/salina_204x54129.txt /scratch/am34/data/salina/xx/x /scratch/am34/data/salina/y $m $n $nfi $gamma $lambda $steps $verbos $ncpu
+
+
+#mpiexec -n 2 ../../bin/istaDVxS /scratch/em24/ompo_salina/salina_204x54129x200_D /scratch/em24/ompo_salina/salina_204x54129x200_64 /scratch/am34/data/salina/istax /scratch/am34/data/salina/istay $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+#mpiexec -n 2 ~/GitHub/sparsefactor/bin/istaDVxS ../../data/d ../../data/v_4x6x3_2/v_4x6x3_2 ../../data/x ../../data/y 4 6 3 2 1 0.1 0.01 20 0 1
+#mpiexec -n 2 ../../bin/istaAx ../../data/a_4x6_2/a_4x6_2 ../../data/x ../../data/y 4 6 2 0.1 0.01 20 0 1

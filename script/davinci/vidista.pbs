@@ -1,0 +1,49 @@
+#PBS -N ista_mpi
+#PBS -l nodes=12:ppn=12
+#PBS -l walltime=00:30:00
+#PBS -M am34@rice.edu
+#PBS -q parallel
+#PBS -m bae
+#PBS -V
+#PBS -o /scratch/am34/results/mpi/ista/vid/
+#PBS -e /scratch/am34/results/mpi/ista/vid/
+
+
+m=1764
+n=100000
+
+
+ld=1
+gamma=0.03 
+lambda=0.1
+steps=5
+verbos=0
+ncpu=1
+
+
+echo "DVxS"
+echo "L=1000"
+l=1000
+nfi=64
+mpiexec -n $nfi ~/GitHub/sparsefactor/bin/istaDVxS  /scratch/am34/data/dict/vid/video_1764x100000x1000_D /scratch/am34/data/dict/vid/v1000/video_1764x100000x1000_64 /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+
+echo "DVxS"
+echo "L=2000"
+l=2000
+nfi=64
+mpiexec -n $nfi ~/GitHub/sparsefactor/bin/istaDVxS /scratch/am34/data/dict/vid/video_1764x100000x2000_D /scratch/am34/data/dict/vid/v2000/video_1764x100000x2000_64 /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y  $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+
+
+echo "Ax"
+nfi=1
+mpiexec -n 64 ~/GitHub/sparsefactor/bin/istaAx  /scratch/am34/data/dict/video_1764x100000.txt /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y $m $n $nfi $gamma $lambda $steps $verbos $ncpu
+
+
+
+#mpiexec -n 2 ~/GitHub/sparsefactor/bin/istaDVxS ../../data/d ../../data/v_4x6x3_2/v_4x6x3_2 ../../data/x ../../data/y 4 6 3 2 1 0.1 0.01 20 0 1
+#$SPARK/sbin/davinci.sh --conf "spark.executor.memory=1g" --class "IstaDVxS" $SPARK/new_examples/Ista/target/ista-1.0.jar 1764 100000 1000 0.03 0.1 /scratch/am34/data/dict/vid/video_1764x100000x1000_D /scratch/am34/data/dict/vid/v1000/ /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y 5 0
+#$SPARK/sbin/davinci.sh --conf "spark.executor.memory=1g" --class "IstaDVxS" $SPARK/new_examples/Ista/target/ista-1.0.jar 1764 100000 2000 0.03 0.1 /scratch/am34/data/dict/vid/video_1764x100000x2000_D /scratch/am34/data/dict/vid/v2000/ /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y 5 0
+#mpiexec -n 2 ../../bin/istaDVxS /scratch/em24/ompo_salina/salina_204x54129x200_D /scratch/em24/ompo_salina/salina_204x54129x200_64 /scratch/am34/data/salina/istax /scratch/am34/data/salina/istay $m $n $l $nfi $ld $gamma $lambda $steps $verbos $ncpu
+#piexec -n 2 ../../bin/istaAx ../../data/a_4x6_2/a_4x6_2 ../../data/x ../../data/y 4 6 2 0.1 0.01 20 0 1
+#$SPARK/sbin/davinci.sh --conf "spark.executor.memory=1g" --class "IstaAx" $SPARK/new_examples/Ista/target/ista-1.0.jar 1764 100000 0.03 0.1 /scratch/am34/data/dict/vid/video_1764x100000_100/ /scratch/am34/data/dict/vid/xx/x /scratch/am34/data/dict/vid/yy/y 5 0
+
