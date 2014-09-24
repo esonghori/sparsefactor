@@ -1,4 +1,4 @@
-#PBS -N ista_mpi
+#PBS -N ista_mpi_video
 #PBS -l nodes=8:ppn=8
 #PBS -l walltime=01:00:00
 #PBS -M am34@rice.edu
@@ -16,7 +16,7 @@ n=100000
 ld=1
 gamma=0.03 
 lambda=0.1
-steps=5
+steps=1000
 verbos=0
 ncpu=1
 

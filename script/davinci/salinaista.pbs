@@ -16,7 +16,7 @@ n=54129
 ld=1
 gamma=0.03 
 lambda=0.1
-steps=20
+steps=1000
 verbos=0
 ncpu=1
 echo "DVxS"
