@@ -1,5 +1,5 @@
 #PBS -N ista_mpi
-#PBS -l nodes=12:ppn=12
+#PBS -l nodes=8:ppn=8
 #PBS -l walltime=02:00:00
 #PBS -M am34@rice.edu
 #PBS -q parallel
