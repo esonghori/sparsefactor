@@ -4,7 +4,7 @@
 MPICPP=mpic++ -O3 -g  -std=c++11 -fopenmp
 
 
-all: checkEigen bin bin/omp bin/ompMultiplefile bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS bin/mksample
+all: checkEigen bin bin/omp bin/ompMultiplefile  bin/adaptive-omperr bin/rand-omperr  bin/powerMethodDVxS bin/powerMethodAx bin/ataDVxS bin/ataAx bin/istaAx bin/istaDVxS bin/mksample
 
 checkEigen:
 ifeq ($(EIGEN),)
@@ -16,6 +16,12 @@ bin:
 
 bin/omp: src/omp/omp.cpp
 	${MPICPP} -o bin/omp src/omp/omp.cpp  -I${EIGEN}
+	
+bin/adaptive-omperr: src/omp/adaptive-omperr.cpp
+	${MPICPP} -o bin/adaptive-omperr src/omp/adaptive-omperr.cpp  -I${EIGEN}	
+	
+bin/rand-omperr: src/omp/rand-omperr.cpp
+	${MPICPP} -o bin/rand-omperr src/omp/rand-omperr.cpp  -I${EIGEN}	
 	
 bin/ompMultiplefile: src/omp/ompMultiplefile.cpp
 	${MPICPP} -o bin/ompMultiplefile src/omp/ompMultiplefile.cpp -I${EIGEN}

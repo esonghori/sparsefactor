@@ -324,51 +324,6 @@ int OMPBATCHLLT(MatrixXd& D, MatrixXd& A, int k, double epsilon, vector<Trip>& t
 	return 0;
 }
 
-void findIdx(int n, MatrixXd &A, MatrixXd& D, unsigned int * idx);
-{
-	int npes, myrank;
-	
-	MPI_Comm_size(MPI_COMM_WORLD, &npes);
-	MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-	
-	int myn = A.cols();
-	
-	MPI_Datatype ERROR_ID_type;
-	int array_of_blocklengths[2] = {sizeof(double), sizeof(unsigned int)};
-	MPI_Aint array_of_displacements[2] = {0,sizeof(double)};
-	MPI_Datatype array_of_types[2] = {MPI_DOUBLE, MPI_UNSIGNED};
-	MPI_Type_create_struct(2, array_of_blocklengths, array_of_displacements, array_of_types, &ERROR_ID_type);
-	
-		
-	std::vector<errorID> vError_local(myn);
-	std::vector<errorID> vError(n);
-	
-	MatrixXd GD = (D.transpose()*D);
-	MatrixXd E =  D*GD.inverse()*A - A;	
-	
-	
-	for(unsigned  j=0;j<A.cols();j++)
-	{
-		vError_local[j] = errorID(E.col(j).norm(), npes*j+myrank); 
-	}
-	
-	MPI_Gather(&vError_local.front(), mynm, ERROR_ID_type,
-               &vError.front(), n, ERROR_ID_type,
-               0, MPI_COMM_WORLD);
-               
-    if(!myrank)
-    {           
-		sort(vError.begin(), vError.end(), errorID::compare);
-				
-		for(unsigned i = 0; i < n; i++)
-		{
-			idx[i] = vError[i].id;
-		}
-	}
-	MPI_Bcast(idx, n, MPI_INT, 0, MPI_COMM_WORLD);
-}
-
-
 int main(int argc, char*argv[])
 {
 	int npes, myrank;

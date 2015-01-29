@@ -368,11 +368,11 @@ void findIdx(int n, MatrixXd &A, MatrixXd& D, unsigned int * idx)
     if(!myrank)
     {           
 		sort(vError.begin(), vError.end(), errorID::compare);
-		cout << "errors" << endl;
+		//cout << "errors" << endl;
 		for(unsigned i = 0; i < n; i++)
 		{
 			idx[i] = vError[i].id;
-			cout << vError[i].id << ": " <<  vError[i].error << endl;
+			//cout << vError[i].id << ": " <<  vError[i].error << endl;
 		}
 	}
 	MPI_Bcast(idx, n, MPI_INT, 0, MPI_COMM_WORLD);
